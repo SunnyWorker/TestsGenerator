@@ -7,9 +7,6 @@ using TestsGenerator;
 
 
 
-var rewriter = new CodeRewriter();
-var tree = CSharpSyntaxTree.ParseText(File.ReadAllText("D:\\Unik\\СПП\\TestsGenerator\\TestsGenerator\\SampleClass.cs"));
-var root = tree.GetRoot();
-var node = rewriter.GenerateTestClass(root);
-Console.WriteLine(node);
-
+var pipeline = new Pipeline(new PipelineConfiguration(3,3,3),"D:\\Unik\\СПП\\TestsGenerator\\outputTests");
+List<string> files = new() { "D:\\Unik\\СПП\\TestsGenerator\\TestsGenerator\\SampleClass.cs" };
+await pipeline.PerformProcessing(files);
