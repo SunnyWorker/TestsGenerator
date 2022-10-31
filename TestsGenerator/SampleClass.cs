@@ -6,11 +6,21 @@ namespace TestsGenerator
         {
             Console.WriteLine("Hello, World");
         }
+        
+        public static void Main(string s)
+        {
+            Console.WriteLine("Hello, World");
+        }
 
         [Obsolete]
         public static void MethodForParse()
         {
             Console.WriteLine("I am ready, boy");
+        }
+
+        private int Method()
+        {
+            return 2;
         }
     }
 
