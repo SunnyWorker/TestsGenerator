@@ -21,7 +21,7 @@ public class CodeWalker : CSharpSyntaxWalker
 
     public override void VisitFileScopedNamespaceDeclaration(FileScopedNamespaceDeclarationSyntax node)
     {
-        fileNamespace = node.Name + ".Tests";
+        fileNamespace = node.Name.ToString();
         base.VisitFileScopedNamespaceDeclaration(node);
     }
 

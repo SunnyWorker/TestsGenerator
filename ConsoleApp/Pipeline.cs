@@ -13,7 +13,6 @@ public class Pipeline
     
     private readonly PipelineConfiguration _pipelineConfiguration;
 
-    private CodeGenerator codeGenerator;
     public readonly string writingPath;
     public ConcurrentBag<int> NumberOfReadingTasks { get; }
     public ConcurrentBag<int> NumberOfProcessingTasks { get; }
@@ -22,7 +21,6 @@ public class Pipeline
     public Pipeline(PipelineConfiguration pipelineConfiguration, string writingPath)
     {
         this.writingPath = writingPath;
-        this.codeGenerator = new();
         this._pipelineConfiguration = pipelineConfiguration;
         this.NumberOfReadingTasks = new ConcurrentBag<int>();
         this.NumberOfProcessingTasks = new ConcurrentBag<int>();
@@ -79,6 +77,7 @@ public class Pipeline
     {
         int incremented = Interlocked.Increment(ref _processingCount);
         NumberOfProcessingTasks.Add(incremented);
+        var codeGenerator = new CodeGenerator();
         var result = codeGenerator.GenerateTest(content);
         Interlocked.Decrement(ref _processingCount);
         return result;
@@ -90,7 +89,6 @@ public class Pipeline
         {
             int incremented = Interlocked.Increment(ref _writingCount);
             NumberOfWritingTasks.Add(incremented);
-            Console.WriteLine(writingPath+"\\"+keyValuePair.Key+".cs");
             using (var streamWriter = new StreamWriter(writingPath+"\\"+keyValuePair.Key+".cs"))
             {
                 await streamWriter.WriteAsync(keyValuePair.Value.ToString());

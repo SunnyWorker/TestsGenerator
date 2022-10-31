@@ -1,7 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using ConsoleApp;
-using TestsGenerator;
 
 public class Program
 {
@@ -20,7 +19,6 @@ public class Program
         while ((s = textReader.ReadLine())!=null)
         {
             files.Add(s);
-            s = textReader.ReadLine();
         }
         
         Console.WriteLine("Введите путь к директории, где будут храниться тестовые файлы:");

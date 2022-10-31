@@ -81,7 +81,7 @@ public class CodeGenerator
                 .WithMembers(
                     SingletonList<MemberDeclarationSyntax>(
                         FileScopedNamespaceDeclaration(
-                                IdentifierName(CodeWalker.fileNamespace))
+                                IdentifierName(CodeWalker.fileNamespace+".Tests"))
                             .WithMembers(new SyntaxList<MemberDeclarationSyntax>((ClassDeclaration(classString + "Tests")
                                 .WithAttributeLists(
                                     SingletonList<AttributeListSyntax>(
