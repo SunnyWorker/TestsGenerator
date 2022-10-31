@@ -1,4 +1,4 @@
-namespace TestsGenerator;
+namespace ConsoleApp;
 
 public class PipelineConfiguration
 {

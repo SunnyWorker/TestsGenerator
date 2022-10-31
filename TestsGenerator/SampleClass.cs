@@ -2,12 +2,12 @@ namespace TestsGenerator
 {
     public class SampleClass
     {
-        public static void Main()
+        public static void FirstMethod()
         {
             Console.WriteLine("Hello, World");
         }
         
-        public static void Main(string s)
+        public static void FirstMethod(string s)
         {
             Console.WriteLine("Hello, World");
         }
