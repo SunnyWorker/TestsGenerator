@@ -7,34 +7,19 @@ namespace ConsoleApp;
 
 public class Pipeline
 {
-    private volatile int _readingCount;
-    private volatile int _processingCount;
-    private volatile int _writingCount;
-    
+
     private readonly PipelineConfiguration _pipelineConfiguration;
 
     public readonly string writingPath;
-    public ConcurrentBag<int> NumberOfReadingTasks { get; }
-    public ConcurrentBag<int> NumberOfProcessingTasks { get; }
-    public ConcurrentBag<int> NumberOfWritingTasks { get; }
-    
+
     public Pipeline(PipelineConfiguration pipelineConfiguration, string writingPath)
     {
         this.writingPath = writingPath;
         this._pipelineConfiguration = pipelineConfiguration;
-        this.NumberOfReadingTasks = new ConcurrentBag<int>();
-        this.NumberOfProcessingTasks = new ConcurrentBag<int>();
-        this.NumberOfWritingTasks = new ConcurrentBag<int>();
     }
 
     public async Task PerformProcessing(List<string> files)
     {
-        _readingCount = 0;
-        _processingCount = 0;
-        _writingCount = 0;
-        NumberOfProcessingTasks.Clear();
-        NumberOfProcessingTasks.Clear();
-        NumberOfWritingTasks.Clear();
         
         var linkOptions = new DataflowLinkOptions {PropagateCompletion = true};
         var readingBlock = new TransformBlock<string, string>(
@@ -61,25 +46,21 @@ public class Pipeline
 
     private async Task<string> ReadFile(string filePath)
     {
-        int incremented = Interlocked.Increment(ref _readingCount);
-        NumberOfReadingTasks.Add(incremented);
+
         string result;
         using (var streamReader = new StreamReader(filePath))
         {
             result = await streamReader.ReadToEndAsync();
         }
         
-        Interlocked.Decrement(ref _readingCount);
         return result;
     }
 
     private Dictionary<string,SyntaxTree> ProcessFile(string content)
     {
-        int incremented = Interlocked.Increment(ref _processingCount);
-        NumberOfProcessingTasks.Add(incremented);
+
         var codeGenerator = new CodeGenerator();
         var result = codeGenerator.GenerateTest(content);
-        Interlocked.Decrement(ref _processingCount);
         return result;
     }
 
@@ -87,13 +68,10 @@ public class Pipeline
     {
         foreach (var keyValuePair in list)
         {
-            int incremented = Interlocked.Increment(ref _writingCount);
-            NumberOfWritingTasks.Add(incremented);
             using (var streamWriter = new StreamWriter(writingPath+"\\"+keyValuePair.Key+".cs"))
             {
                 await streamWriter.WriteAsync(keyValuePair.Value.ToString());
             }
-            Interlocked.Decrement(ref _writingCount);
         }
     }
 }
