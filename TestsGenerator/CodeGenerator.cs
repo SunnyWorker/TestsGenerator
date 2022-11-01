@@ -19,20 +19,17 @@ public class CodeGenerator
         {
             foreach (var keyClass in CodeWalker.Classes[key].Keys)
             {
-                for (int i = 0; i < CodeWalker.Classes[key].Count; i++)
+                for (int j = 0; j < CodeWalker.Classes[key][keyClass].Count; j++)
                 {
-                    for (int j = 0; j < CodeWalker.Classes[key][keyClass].Count; j++)
+                    if (CodeWalker.Classes[key][keyClass].FindAll(s => s.Equals(CodeWalker.Classes[key][keyClass][j])).Count > 1)
                     {
-                        if (CodeWalker.Classes[key][keyClass].FindAll(s => s.Equals(CodeWalker.Classes[key][keyClass][i])).Count > 1)
+                        string name = CodeWalker.Classes[key][keyClass][j];
+                        int u = 1;
+                        for (int k = 0; k < CodeWalker.Classes[key][keyClass].Count; k++)
                         {
-                            string name = CodeWalker.Classes[key][keyClass][i];
-                            int u = 1;
-                            for (int k = 0; k < CodeWalker.Classes[key][keyClass].Count; k++)
+                            if (CodeWalker.Classes[key][keyClass][k].Equals(name))
                             {
-                                if (CodeWalker.Classes[key][keyClass][k].Equals(name))
-                                {
-                                    CodeWalker.Classes[key][keyClass][k] = name + u++;
-                                }
+                                CodeWalker.Classes[key][keyClass][k] = name + u++;
                             }
                         }
                     }
